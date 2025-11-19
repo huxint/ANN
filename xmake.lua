@@ -5,6 +5,8 @@ set_toolchains("mingw")
 set_languages("c++latest")
 add_links("stdc++exp")
 add_rules("plugin.compile_commands.autoupdate")
+add_includedirs("third_party/eigen", {public = true})
+add_includedirs("include", {public = true})
 
 target("ANN")
     set_kind("binary")
