@@ -1,6 +1,9 @@
-#include <iostream>
+#include <Eigen/Dense>
+#include "test.hpp"
+
+using namespace nn;
 
 int main() {
-    std::cout << "hello world!" << std::endl;
+    test1();
     return 0;
 }
