@@ -1,6 +1,6 @@
 #pragma once
 #include <print>
-#include <ANN>
+#include <huxint/ann>
 
 using namespace nn;
 
