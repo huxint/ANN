@@ -30,12 +30,13 @@ namespace nn {
         Vector forward(const Vector &x) override {
             last_input_ = x;
             last_Z_ = W_ * x + b_;
-            return apply_activation(last_Z_, activation_);
+            last_activation_ = apply_activation(last_Z_, activation_);
+            return last_activation_;
         }
 
         Vector backward(const Vector &grad, double lr) override {
             // 1. 激活函数的链式法则：从 dL/da -> dL/dz
-            Vector grad_z = grad.cwiseProduct(activation_derivative(last_Z_, activation_));
+            Vector grad_z = grad.cwiseProduct(activation_derivative(last_activation_, activation_));
 
             Matrix dW = grad_z * last_input_.transpose(); // dL/dW
             Vector db = grad_z;                           // dL/db
@@ -56,5 +57,6 @@ namespace nn {
         Vector last_input_; // 最后一次输入 x
         Vector last_Z_;     // Z = W * x + b
         Activation activation_;
+        Vector last_activation_; // 最后一次激活函数输出 a = f(Z)
     };
 } // namespace nn
