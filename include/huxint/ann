@@ -1,3 +1,4 @@
+#pragma once
 #include "network.hpp"
 #include "trainer.hpp"
 #include "util.hpp"
