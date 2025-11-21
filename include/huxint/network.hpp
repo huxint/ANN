@@ -30,7 +30,7 @@ namespace nn {
 
         void backward(const Vector &output, double lr) {
             Vector grad = output;
-            for (const auto &layer : layers_ | std::ranges::views::reverse) {
+            for (auto &layer : layers_ | std::ranges::views::reverse) {
                 grad = layer->backward(grad, lr);
             }
         }
