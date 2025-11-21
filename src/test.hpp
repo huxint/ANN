@@ -43,7 +43,7 @@ inline void test1() {
     std::println("loss: {}", trainer.evaluate(inputs, targets));
 
     auto y1 = function(prediction);
-    auto y2 = net.predict(prediction).norm();
+    auto y2 = net.predict(prediction)(0);
 
     std::println("targets: {}", y1);
     std::println("predictions: {}", y2);
@@ -91,11 +91,12 @@ inline void test2() {
     Vector prediction(3);
     prediction << dist(gen), dist(gen), dist(gen);
 
-    auto y1 = function(prediction);
-    auto y2 = net.predict(prediction).norm();
-
     std::println("loss: {}", trainer.evaluate(inputs, targets));
-    std::println("targets: {}", function(prediction));
-    std::println("predictions: {}", net.predict(prediction));
+
+    auto y1 = function(prediction);
+    auto y2 = net.predict(prediction)(0);
+
+    std::println("targets: {}", y1);
+    std::println("predictions: {}", y2);
     std::println("{}", std::string(40, '-'));
 }
