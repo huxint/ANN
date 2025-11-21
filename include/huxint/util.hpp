@@ -1,11 +1,22 @@
 #pragma once
 #include <Eigen/Dense>
+#include <cstdint>
+#include <random>
 
 namespace nn {
     using Matrix = Eigen::MatrixXd;
     using Vector = Eigen::VectorXd;
 
     enum class Activation { Sigmoid, ReLU, Tanh, None };
+
+    inline std::mt19937 &global_rng() {
+        static std::mt19937 rng(std::random_device{}());
+        return rng;
+    }
+
+    inline void set_global_seed(std::uint64_t seed) {
+        global_rng().seed(seed);
+    }
 
     inline Vector sigmoid(const Vector &x) {
         return (1.0 / (1.0 + (-x.array()).exp())).matrix();
