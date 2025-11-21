@@ -10,7 +10,7 @@ inline void test1() {
     Matrix inputs(size, 2);
     Matrix targets(size, 1);
 
-    std::mt19937 gen(std::random_device{}());
+    auto &gen = global_rng();
     std::uniform_real_distribution<double> dist_x1(0.0, 1.0);
     std::uniform_real_distribution<double> dist_x2(-1.0, 1.0);
 
@@ -56,7 +56,7 @@ inline void test2() {
     Matrix inputs(size, 3);
     Matrix targets(size, 1);
 
-    std::mt19937 gen(std::random_device{}());
+    auto &gen = global_rng();
     std::uniform_real_distribution<double> dist(-1.0, 1.0);
 
     auto function = [](const Vector &x) {

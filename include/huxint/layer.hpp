@@ -16,7 +16,7 @@ namespace nn {
     public:
         DenseLayer(int input_size, int output_size, Activation activation = Activation::Sigmoid)
         : activation_(activation) { // 初始化权重和偏置
-            std::mt19937 gen(std::random_device{}());
+            auto &gen = global_rng();
             std::normal_distribution<double> dist(0.0, 1.0);
 
             b_ = Vector::Zero(output_size);
