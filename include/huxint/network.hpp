@@ -16,15 +16,11 @@ namespace nn {
         }
 
         Vector forward(const Vector &input) {
-            Vector out = input;
-            for (auto &layer : layers_) {
-                out = layer->forward(out);
-            }
-            return out;
+            return run(input, true);
         }
 
         Vector predict(const Vector &input) {
-            return forward(input);
+            return run(input, false);
         }
 
         void backward(const Vector &output, double lr) {
@@ -35,6 +31,14 @@ namespace nn {
         }
 
     private:
+        Vector run(const Vector &input, bool training) {
+            Vector out = input;
+            for (auto &layer : layers_) {
+                out = training ? layer->forward(out) : layer->predict(out);
+            }
+            return out;
+        }
+
         std::vector<std::unique_ptr<Layer>> layers_;
     };
 } // namespace nn
