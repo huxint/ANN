@@ -7,7 +7,9 @@ namespace nn {
     using Matrix = Eigen::MatrixXd;
     using Vector = Eigen::VectorXd;
 
-    enum class Activation { Sigmoid, ReLU, Tanh, None };
+    enum class Activation { Sigmoid, ReLU, LeakyReLU, Tanh, None };
+
+    inline constexpr double kLeakyReluSlope = 0.01;
 
     inline std::mt19937 &global_rng() {
         static std::mt19937 rng(std::random_device{}());
@@ -34,6 +36,18 @@ namespace nn {
         return (activate_x.array() > 0.0).cast<double>().matrix();
     }
 
+    inline Vector leaky_relu(const Vector &x, double alpha = kLeakyReluSlope) {
+        return x.unaryExpr([alpha](double v) {
+            return v > 0.0 ? v : alpha * v;
+        });
+    }
+
+    inline Vector leaky_relu_deriv_activated(const Vector &activate_x, double alpha = kLeakyReluSlope) {
+        return activate_x.unaryExpr([alpha](double v) {
+            return v > 0.0 ? 1.0 : alpha;
+        });
+    }
+
     inline Vector tanh(const Vector &x) {
         return x.array().tanh().matrix();
     }
@@ -46,6 +60,8 @@ namespace nn {
         switch (activation) {
             case Activation::ReLU:
                 return relu(x);
+            case Activation::LeakyReLU:
+                return leaky_relu(x);
             case Activation::None:
                 return x;
             case Activation::Tanh:
@@ -60,6 +76,8 @@ namespace nn {
         switch (activation) {
             case Activation::ReLU:
                 return relu_deriv_activated(x);
+            case Activation::LeakyReLU:
+                return leaky_relu_deriv_activated(x);
             case Activation::None:
                 return Vector::Ones(x.size());
             case Activation::Tanh:
