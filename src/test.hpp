@@ -29,8 +29,9 @@ inline void test1() {
     }
 
     Network net;
-    net.addLayer<DenseLayer>(2, 16, Activation::ReLU);
-    net.addLayer<DenseLayer>(16, 16, Activation::Sigmoid);
+    net.addLayer<DenseLayer>(2, 32, Activation::LeakyReLU);
+    net.addLayer<DropoutLayer>(0.01); // 轻量 dropout，帮助泛化
+    net.addLayer<DenseLayer>(32, 16, Activation::Sigmoid);
     net.addLayer<DenseLayer>(16, 1, Activation::None);
 
     double learning_rate = 0.01;
@@ -77,14 +78,16 @@ inline void test2() {
 
     // 搭一个层数多一点的网络：3 -> 64 -> 64 -> 32 -> 32 -> 16 -> 1
     Network net;
-    net.addLayer<DenseLayer>(3, 64, Activation::ReLU);
+    net.addLayer<DenseLayer>(3, 64, Activation::LeakyReLU);
+    net.addLayer<DropoutLayer>(0.001);
     net.addLayer<DenseLayer>(64, 64, Activation::ReLU);
     net.addLayer<DenseLayer>(64, 32, Activation::ReLU);
+    net.addLayer<DropoutLayer>(0.001);
     net.addLayer<DenseLayer>(32, 32, Activation::ReLU);
     net.addLayer<DenseLayer>(32, 16, Activation::ReLU);
     net.addLayer<DenseLayer>(16, 1, Activation::None); // 最后一层线性输出，适合回归
 
-    double learning_rate = 0.01;
+    double learning_rate = 0.001;
     Trainer trainer(net, learning_rate);
     trainer.train(inputs, targets, 1000);
 
